@@ -34,7 +34,7 @@ namespace AvalonDock.Controls
 	/// </summary>
 	/// <seealso cref="Window"/>
 	/// <seealso cref="ILayoutControl"/>
-	public abstract class LayoutFloatingWindowControl : Window, ILayoutControl
+	public abstract class LayoutFloatingWindowControl : HandyControl.Controls.GlowWindow, ILayoutControl
 	{
 		#region fields
 		private ResourceDictionary currentThemeResourceDictionary; // = null

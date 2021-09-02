@@ -2058,16 +2058,18 @@
     </Style>
 
     <Style x:Key="{x:Type avalonDockControls:LayoutAnchorableFloatingWindowControl}" TargetType="{x:Type avalonDockControls:LayoutAnchorableFloatingWindowControl}">
-        <Setter Property="UseLayoutRounding" Value="True" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBackground}}" />
+		<Setter Property="UseLayoutRounding" Value="True" />
+		<Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBackground}}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBorder}}" />
+		<Setter Property="ActiveGlowColor" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+		<Setter Property="InactiveGlowColor" Value="Gray" />
 		<Setter Property="shell:WindowChrome.WindowChrome">
             <Setter.Value>
                 <shell:WindowChrome
 					CaptionHeight="21"
 					CornerRadius="0"
 					GlassFrameThickness="0"
-					ResizeBorderThickness="10" />
+					ResizeBorderThickness="0" />
             </Setter.Value>
         </Setter>
         <Setter Property="Template">
