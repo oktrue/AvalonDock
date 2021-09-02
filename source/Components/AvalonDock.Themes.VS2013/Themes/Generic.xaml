@@ -2068,7 +2068,7 @@
                 <shell:WindowChrome
 					CaptionHeight="21"
 					CornerRadius="0"
-					GlassFrameThickness="0"
+					GlassFrameThickness="-1"
 					ResizeBorderThickness="0" />
             </Setter.Value>
         </Setter>
@@ -2080,7 +2080,7 @@
 							x:Name="WindowBorder"
 							Background="{TemplateBinding Background}"
 							BorderBrush="{TemplateBinding BorderBrush}"
-							BorderThickness="1">
+							BorderThickness="0">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" MinHeight="21" />
