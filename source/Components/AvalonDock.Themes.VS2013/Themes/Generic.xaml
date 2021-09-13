@@ -1790,8 +1790,9 @@
 		<Setter Property="UseLayoutRounding" Value="True" />
 		<Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingDocumentWindowBackground}}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingDocumentWindowBorder}}" />
-		<Setter Property="ActiveGlowColor" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+		<Setter Property="ActiveGlowColor" Value="#3F3F46" />
 		<Setter Property="InactiveGlowColor" Value="#3F3F46" />
+		<Setter Property="NonClientAreaHeight" Value="{Binding ElementName=Header, Path=ActualHeight}" />
 		<Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}">
@@ -1911,6 +1912,7 @@
 						<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsActive}" Value="True">
                             <!--<Setter TargetName="Header" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabSelectedActiveBackground}}" />-->
 							<Setter TargetName="Header" Property="TextElement.Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabSelectedActiveText}}" />
+							<Setter Property="ActiveGlowColor" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}"/>
 						</DataTrigger>
 
 						<!--  In VS DocumentFloatingWindow colors change only for header text and icon if window is inactive  -->
@@ -2052,8 +2054,9 @@
 		<Setter Property="UseLayoutRounding" Value="True" />
 		<Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBackground}}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBorder}}" />
-		<Setter Property="ActiveGlowColor" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+		<Setter Property="ActiveGlowColor" Value="#3F3F46" />
 		<Setter Property="InactiveGlowColor" Value="#3F3F46" />
+		<Setter Property="NonClientAreaHeight" Value="{Binding ElementName=Header, Path=ActualHeight}" />
 		<Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableFloatingWindowControl}">
@@ -2246,6 +2249,7 @@
 							<Setter TargetName="Header" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ToolWindowCaptionActiveBackground}}" />
 							<Setter TargetName="Header" Property="TextElement.Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ToolWindowCaptionActiveText}}" />
 							<Setter TargetName="DragHandleGeometryPlaceholder" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ToolWindowCaptionActiveGrip}}" />
+							<Setter Property="ActiveGlowColor" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}"/>
 						</DataTrigger>
                         <DataTrigger Binding="{Binding Model.SinglePane.SelectedContent.CanClose, RelativeSource={RelativeSource Mode=Self}}" Value="True">
                             <Setter TargetName="PART_PinClose" Property="Command" Value="{Binding CloseWindowCommand, RelativeSource={RelativeSource TemplatedParent}}" />

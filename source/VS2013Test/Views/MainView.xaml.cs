@@ -1,6 +1,8 @@
-using AvalonDock.VS2013Test.ViewModels;
 using System;
 using System.Windows;
+using System.Windows.Data;
+using System.Windows.Shell;
+using AvalonDock.VS2013Test.ViewModels;
 
 namespace AvalonDock.VS2013Test.Views
 {
@@ -12,50 +14,18 @@ namespace AvalonDock.VS2013Test.Views
         public MainView()
         {
             InitializeComponent();
-			DataContext = Workspace.This;
-		}
 
-		private void MinimizeClick(object sender, RoutedEventArgs e)
-		{
-			WindowState = WindowState.Minimized;
-		}
-
-		private void MaximizeClick(object sender, RoutedEventArgs e)
-		{
-			WindowState = WindowState.Maximized;
-		}
-
-		private void RestoreDownClick(object sender, RoutedEventArgs e)
-		{
-			WindowState = WindowState.Normal;
-		}
-
-		private void CloseClick(object sender, RoutedEventArgs e)
-		{
-			Close();
-		}
-
-		private void WindowStateChanged(object sender, EventArgs e)
-		{
-			SetCaptionHeight();
-		}
-
-		private void HeaderSizeChanged(object sender, SizeChangedEventArgs e)
-		{
-			SetCaptionHeight();
-		}
-
-		private void SetCaptionHeight()
-		{
-			switch (WindowState)
+			var chrome = new WindowChrome
 			{
-				case WindowState.Normal:
-					chrome.CaptionHeight = header.ActualHeight + BorderThickness.Top - chrome.ResizeBorderThickness.Top;
-					break;
-				case WindowState.Maximized:
-					chrome.CaptionHeight = header.ActualHeight - BorderThickness.Top;
-					break;
-			}
+				CornerRadius = new CornerRadius(),
+				GlassFrameThickness = new Thickness(0, 0, 0, 0),
+				ResizeBorderThickness = new Thickness(0, 0, 0, 0),
+				UseAeroCaptionButtons = false
+			};
+			BindingOperations.SetBinding(chrome, WindowChrome.CaptionHeightProperty, new Binding(NonClientAreaHeightProperty.Name) { Source = this });
+			WindowChrome.SetWindowChrome(this, chrome);
+
+			DataContext = Workspace.This;
 		}
 	}
 }
