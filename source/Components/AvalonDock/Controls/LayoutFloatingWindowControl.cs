@@ -21,6 +21,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Shell;
 
 namespace AvalonDock.Controls
 {
@@ -66,6 +67,16 @@ namespace AvalonDock.Controls
 
 		protected LayoutFloatingWindowControl(ILayoutElement model)
 		{
+			var chrome = new WindowChrome
+			{
+				CornerRadius = new CornerRadius(),
+				GlassFrameThickness = new Thickness(0, 0, 0, 0),
+				ResizeBorderThickness = new Thickness(0, 0, 0, 0),
+				UseAeroCaptionButtons = false
+			};
+
+			WindowChrome.SetWindowChrome(this, chrome);
+
 			Loaded += OnLoaded;
 			Unloaded += OnUnloaded;
 			Closing += OnClosing;

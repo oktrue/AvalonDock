@@ -7,7 +7,7 @@ namespace AvalonDock.VS2013Test.Views
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainView : Window
+	public partial class MainView
     {
         public MainView()
         {

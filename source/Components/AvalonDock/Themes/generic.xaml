@@ -15,9 +15,7 @@
 	xmlns:avalonDock="clr-namespace:AvalonDock"
 	xmlns:avalonDockControls="clr-namespace:AvalonDock.Controls"
 	xmlns:avalonDockConverters="clr-namespace:AvalonDock.Converters"
-	xmlns:avalonDockLayout="clr-namespace:AvalonDock.Layout"
-	xmlns:avalonDockProperties="clr-namespace:AvalonDock.Properties"
-	xmlns:shell="clr-namespace:Microsoft.Windows.Shell">
+	xmlns:avalonDockProperties="clr-namespace:AvalonDock.Properties">
 
 	<!--  DocumentPaneControlStyle  -->
 	<Style x:Key="DocumentPaneControlStyle" TargetType="{x:Type avalonDockControls:LayoutDocumentPaneControl}">
@@ -918,16 +916,6 @@
 		<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
 		<Setter Property="BorderThickness" Value="3" />
-		<Setter Property="shell:WindowChrome.WindowChrome">
-			<Setter.Value>
-				<shell:WindowChrome
-					CaptionHeight="16"
-					CornerRadius="3,3,3,3"
-					GlassFrameThickness="0"
-					ResizeBorderThickness="10"
-					ShowSystemMenu="False" />
-			</Setter.Value>
-		</Setter>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}">
@@ -959,8 +947,8 @@
 									</Border>
 									<Button
 										Grid.Column="1"
-										shell:WindowChrome.IsHitTestVisibleInChrome="True"
-										Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
+										WindowChrome.IsHitTestVisibleInChrome="True"
+										Command="{x:Static SystemCommands.MaximizeWindowCommand}"
 										CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
 										Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
@@ -971,8 +959,8 @@
 
 									<Button
 										Grid.Column="1"
-										shell:WindowChrome.IsHitTestVisibleInChrome="True"
-										Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"
+										WindowChrome.IsHitTestVisibleInChrome="True"
+										Command="{x:Static SystemCommands.RestoreWindowCommand}"
 										CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
 										Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
@@ -983,7 +971,7 @@
 
 									<Button
 										Grid.Column="2"
-										shell:WindowChrome.IsHitTestVisibleInChrome="True"
+										WindowChrome.IsHitTestVisibleInChrome="True"
 										Command="{Binding Path=CloseWindowCommand, RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
 										Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
@@ -1013,16 +1001,6 @@
 		<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
 		<Setter Property="BorderThickness" Value="3" />
-		<Setter Property="shell:WindowChrome.WindowChrome">
-			<Setter.Value>
-				<shell:WindowChrome
-					CaptionHeight="16"
-					CornerRadius="3,3,3,3"
-					GlassFrameThickness="0"
-					ResizeBorderThickness="10"
-					ShowSystemMenu="False" />
-			</Setter.Value>
-		</Setter>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableFloatingWindowControl}">
@@ -1059,7 +1037,7 @@
 									<avalonDockControls:DropDownButton
 										x:Name="SinglePaneContextMenu"
 										Grid.Column="1"
-										shell:WindowChrome.IsHitTestVisibleInChrome="True"
+										WindowChrome.IsHitTestVisibleInChrome="True"
 										DropDownContextMenu="{Binding Model.Root.Manager.AnchorableContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
 										DropDownContextMenuDataContext="{Binding Path=SingleContentLayoutItem, RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
@@ -1071,8 +1049,8 @@
 
 									<Button
 										Grid.Column="2"
-										shell:WindowChrome.IsHitTestVisibleInChrome="True"
-										Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
+										WindowChrome.IsHitTestVisibleInChrome="True"
+										Command="{x:Static SystemCommands.MaximizeWindowCommand}"
 										CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
 										Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
@@ -1083,8 +1061,8 @@
 
 									<Button
 										Grid.Column="2"
-										shell:WindowChrome.IsHitTestVisibleInChrome="True"
-										Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"
+										WindowChrome.IsHitTestVisibleInChrome="True"
+										Command="{x:Static SystemCommands.RestoreWindowCommand}"
 										CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
 										Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
@@ -1096,7 +1074,7 @@
 									<Button
 										x:Name="CloseButton"
 										Grid.Column="3"
-										shell:WindowChrome.IsHitTestVisibleInChrome="True"
+										WindowChrome.IsHitTestVisibleInChrome="True"
 										Command="{Binding HideWindowCommand, RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
 										Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
@@ -1135,15 +1113,6 @@
 		<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
 		<Setter Property="SizeToContent" Value="WidthAndHeight" />
 		<Setter Property="ResizeMode" Value="NoResize" />
-		<Setter Property="shell:WindowChrome.WindowChrome">
-			<Setter.Value>
-				<shell:WindowChrome
-					CaptionHeight="16"
-					CornerRadius="3,3,3,3"
-					GlassFrameThickness="4"
-					ResizeBorderThickness="10" />
-			</Setter.Value>
-		</Setter>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:NavigatorWindow}">

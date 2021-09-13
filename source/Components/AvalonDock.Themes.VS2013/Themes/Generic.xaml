@@ -16,8 +16,7 @@
 	xmlns:avalonDockControls="clr-namespace:AvalonDock.Controls;assembly=AvalonDock"
 	xmlns:avalonDockConverters="clr-namespace:AvalonDock.Converters;assembly=AvalonDock"
 	xmlns:avalonDockProperties="clr-namespace:AvalonDock.Properties;assembly=AvalonDock"
-	xmlns:reskeys="clr-namespace:AvalonDock.Themes.VS2013.Themes"
-	xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=AvalonDock">
+	xmlns:reskeys="clr-namespace:AvalonDock.Themes.VS2013.Themes">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/AvalonDock.Themes.VS2013;component/OverlayButtons.xaml" />
         <ResourceDictionary Source="/AvalonDock.Themes.VS2013;component/Themes/Menu/MenuItem.xaml" />
@@ -1790,18 +1789,10 @@
     <Style x:Key="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}" TargetType="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}">
 		<Setter Property="UseLayoutRounding" Value="True" />
 		<Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingDocumentWindowBackground}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingDocumentWindowBorder}}" />
-        <Setter Property="shell:WindowChrome.WindowChrome">
-            <Setter.Value>
-                <shell:WindowChrome
-					CaptionHeight="32"
-					CornerRadius="0"
-					GlassFrameThickness="0"
-					ResizeBorderThickness="10"
-					ShowSystemMenu="False" />
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Template">
+		<Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingDocumentWindowBorder}}" />
+		<Setter Property="ActiveGlowColor" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+		<Setter Property="InactiveGlowColor" Value="#3F3F46" />
+		<Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}">
                     <Grid>
@@ -1809,7 +1800,7 @@
 							x:Name="WindowBorder"
 							Background="{TemplateBinding Background}"
 							BorderBrush="{TemplateBinding BorderBrush}"
-							BorderThickness="1">
+							BorderThickness="0">
                             <Grid>
                                 <Grid.RowDefinitions>
 									<RowDefinition Height="Auto" MinHeight="32" />
@@ -1843,8 +1834,8 @@
                                             Width="34"
 											Height="26"
 											VerticalAlignment="Top"
-											shell:WindowChrome.IsHitTestVisibleInChrome="True"
-											Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
+											WindowChrome.IsHitTestVisibleInChrome="True"
+											Command="{x:Static SystemCommands.MaximizeWindowCommand}"
 											CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 											Focusable="False"
 											Style="{StaticResource AvalonDockThemeVs2013ButtonStyle}"
@@ -1867,8 +1858,8 @@
                                             Width="34"
 											Height="26"
                                             VerticalAlignment="Top"
-											shell:WindowChrome.IsHitTestVisibleInChrome="True"
-											Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"
+											WindowChrome.IsHitTestVisibleInChrome="True"
+											Command="{x:Static SystemCommands.RestoreWindowCommand}"
 											CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 											Focusable="False"
 											Style="{StaticResource AvalonDockThemeVs2013ButtonStyle}"
@@ -1890,7 +1881,7 @@
                                             Width="34"
 											Height="26"
 											VerticalAlignment="Top"
-											shell:WindowChrome.IsHitTestVisibleInChrome="True"
+											WindowChrome.IsHitTestVisibleInChrome="True"
 											Command="{Binding Path=CloseWindowCommand, RelativeSource={RelativeSource TemplatedParent}}"
 											Focusable="False"
 											Style="{StaticResource AvalonDockThemeVs2013ButtonStyle}"
@@ -2062,17 +2053,8 @@
 		<Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBackground}}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBorder}}" />
 		<Setter Property="ActiveGlowColor" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
-		<Setter Property="InactiveGlowColor" Value="Gray" />
-		<Setter Property="shell:WindowChrome.WindowChrome">
-            <Setter.Value>
-                <shell:WindowChrome
-					CaptionHeight="21"
-					CornerRadius="0"
-					GlassFrameThickness="-1"
-					ResizeBorderThickness="0" />
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Template">
+		<Setter Property="InactiveGlowColor" Value="#3F3F46" />
+		<Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableFloatingWindowControl}">
                     <Grid>
@@ -2157,7 +2139,7 @@
 											Height="15"
 											HorizontalAlignment="Center"
 											VerticalAlignment="Center"
-											shell:WindowChrome.IsHitTestVisibleInChrome="True"
+											WindowChrome.IsHitTestVisibleInChrome="True"
 											DropDownContextMenu="{Binding Model.Root.Manager.AnchorableContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
 											DropDownContextMenuDataContext="{Binding Path=SingleContentLayoutItem, RelativeSource={RelativeSource TemplatedParent}}"
 											Focusable="False"
@@ -2182,8 +2164,8 @@
 											Height="15"
 											HorizontalAlignment="Center"
 											VerticalAlignment="Center"
-											shell:WindowChrome.IsHitTestVisibleInChrome="True"
-											Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
+											WindowChrome.IsHitTestVisibleInChrome="True"
+											Command="{x:Static SystemCommands.MaximizeWindowCommand}"
 											CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 											Focusable="False"
 											Style="{StaticResource AvalonDockThemeVs2013ButtonStyle}"
@@ -2207,8 +2189,8 @@
 											Height="15"
 											HorizontalAlignment="Center"
 											VerticalAlignment="Center"
-											shell:WindowChrome.IsHitTestVisibleInChrome="True"
-											Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"
+											WindowChrome.IsHitTestVisibleInChrome="True"
+											Command="{x:Static SystemCommands.RestoreWindowCommand}"
 											CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 											Focusable="False"
 											Style="{StaticResource AvalonDockThemeVs2013ButtonStyle}"
@@ -2233,7 +2215,7 @@
 											Height="15"
 											HorizontalAlignment="Center"
 											VerticalAlignment="Center"
-											shell:WindowChrome.IsHitTestVisibleInChrome="True"
+											WindowChrome.IsHitTestVisibleInChrome="True"
 											Command="{Binding HideWindowCommand, RelativeSource={RelativeSource TemplatedParent}}"
 											Focusable="False"
 											Style="{StaticResource AvalonDockThemeVs2013ButtonStyle}"

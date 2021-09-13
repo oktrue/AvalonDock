@@ -1,30 +1,22 @@
-<Window x:Class="AvalonDock.VS2013Test.Views.MainView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AvalonDock.VS2013Test"
-		xmlns:viewModels="clr-namespace:AvalonDock.VS2013Test.ViewModels"
-		xmlns:icons="clr-namespace:VS2013Test.Icons"
-        mc:Ignorable="d"
-		d:DataContext="{d:DesignInstance viewModels:Workspace, IsDesignTimeCreatable=True}"
-        Title="VS2013Test" MinWidth="140" MinHeight="116" MaxWidth="{x:Static SystemParameters.MaximizedPrimaryScreenWidth}" MaxHeight="{x:Static SystemParameters.MaximizedPrimaryScreenHeight}" Height="900" Width="1600" SnapsToDevicePixels="True" Foreground="{DynamicResource WindowForeground}" Background="{DynamicResource HeaderBackground}" WindowStyle="None" ResizeMode="CanResizeWithGrip" StateChanged="WindowStateChanged">
+<hc:GlowWindow x:Class="AvalonDock.VS2013Test.Views.MainView"
+			   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"				
+			   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"			  				
+			   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"				
+			   xmlns:hc="https://handyorg.github.io/handycontrol"				
+			   xmlns:local="clr-namespace:AvalonDock.VS2013Test"				
+			   xmlns:viewModels="clr-namespace:AvalonDock.VS2013Test.ViewModels"				
+			   xmlns:icons="clr-namespace:VS2013Test.Icons"				
+			   mc:Ignorable="d"				
+			   d:DataContext="{d:DesignInstance viewModels:Workspace, IsDesignTimeCreatable=True}"				
+			   ActiveGlowColor="#1982C4"			
+			   InactiveGlowColor="#3F3F46"
+			   BorderThickness="0"  
+			   Title="VS2013Test" MinWidth="140" MinHeight="116" MaxWidth="{x:Static SystemParameters.MaximizedPrimaryScreenWidth}" MaxHeight="{x:Static SystemParameters.MaximizedPrimaryScreenHeight}" Height="900" Width="1600" SnapsToDevicePixels="True" Foreground="{DynamicResource WindowForeground}" Background="{DynamicResource HeaderBackground}" WindowStyle="None" ResizeMode="CanResizeWithGrip" StateChanged="WindowStateChanged">
 
 	<WindowChrome.WindowChrome>
-		<WindowChrome x:Name="chrome" ResizeBorderThickness="8" CornerRadius="0" GlassFrameThickness="0" NonClientFrameEdges="None" />
+		<WindowChrome x:Name="chrome" ResizeBorderThickness="0" CornerRadius="0" GlassFrameThickness="0" />
 	</WindowChrome.WindowChrome>
-
-	<Window.Style>
-		<Style TargetType="{x:Type Window}">
-			<Setter Property="BorderThickness" Value="1" />
-			<Setter Property="BorderBrush" Value="{DynamicResource WindowBorderBrush}" />
-			<Style.Triggers>
-				<Trigger Property="IsActive" Value="False">
-					<Setter Property="BorderBrush" Value="{DynamicResource WindowInactiveBorderBrush}"/>
-				</Trigger>
-			</Style.Triggers>
-		</Style>
-	</Window.Style>
 
 	<Grid>
 		<Grid.Style>
@@ -281,4 +273,4 @@
 			</Grid>
 		</Border>
 	</Grid>
-</Window>
+</hc:GlowWindow>
