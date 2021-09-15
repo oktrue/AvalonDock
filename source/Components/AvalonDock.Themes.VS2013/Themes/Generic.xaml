@@ -16,7 +16,8 @@
 	xmlns:avalonDockControls="clr-namespace:AvalonDock.Controls;assembly=AvalonDock"
 	xmlns:avalonDockConverters="clr-namespace:AvalonDock.Converters;assembly=AvalonDock"
 	xmlns:avalonDockProperties="clr-namespace:AvalonDock.Properties;assembly=AvalonDock"
-	xmlns:reskeys="clr-namespace:AvalonDock.Themes.VS2013.Themes">
+	xmlns:reskeys="clr-namespace:AvalonDock.Themes.VS2013.Themes"
+	xmlns:controlzEx="urn:controlzex">
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="/AvalonDock.Themes.VS2013;component/OverlayButtons.xaml" />
 		<ResourceDictionary Source="/AvalonDock.Themes.VS2013;component/Themes/Menu/MenuItem.xaml" />
@@ -1806,6 +1807,7 @@
 
 						<Border
 							x:Name="Header"
+							controlzEx:WindowChrome.IsHitTestVisibleInChrome="True"
 							TextElement.Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabSelectedInactiveText}}">
 							<Grid>
 								<Grid.ColumnDefinitions>
@@ -1827,7 +1829,7 @@
                                     Width="34"
 									Height="26"
 									VerticalAlignment="Top"
-									WindowChrome.IsHitTestVisibleInChrome="True"
+									controlzEx:WindowChrome.IsHitTestVisibleInChrome="True"
 									Command="{x:Static SystemCommands.MaximizeWindowCommand}"
 									CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 									Focusable="False"
@@ -1851,7 +1853,7 @@
                                     Width="34"
 									Height="26"
                                     VerticalAlignment="Top"
-									WindowChrome.IsHitTestVisibleInChrome="True"
+									controlzEx:WindowChrome.IsHitTestVisibleInChrome="True"
 									Command="{x:Static SystemCommands.RestoreWindowCommand}"
 									CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 									Focusable="False"
@@ -1874,7 +1876,7 @@
                                     Width="34"
 									Height="26"
 									VerticalAlignment="Top"
-									WindowChrome.IsHitTestVisibleInChrome="True"
+									controlzEx:WindowChrome.IsHitTestVisibleInChrome="True"
 									Command="{Binding Path=CloseWindowCommand, RelativeSource={RelativeSource TemplatedParent}}"
 									Focusable="False"
 									Style="{StaticResource AvalonDockThemeVs2013ButtonStyle}"
@@ -2046,7 +2048,7 @@
 		<Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBackground}}" />
 		<Setter Property="ActiveGlowColor" Value="#3F3F46" />
 		<Setter Property="InactiveGlowColor" Value="#3F3F46" />
-		<Setter Property="NonClientAreaHeight" Value="21" />
+		<Setter Property="NonClientAreaHeight" Value="0" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableFloatingWindowControl}">

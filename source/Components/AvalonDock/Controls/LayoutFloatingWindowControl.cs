@@ -21,7 +21,12 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Shell;
+//using System.Windows.Shell;
+using ControlzEx.Behaviors;
+using Microsoft.Xaml.Behaviors;
+using System.Reflection;
+using ControlzEx.Native;
+using ControlzEx.Standard;
 
 namespace AvalonDock.Controls
 {
@@ -35,6 +40,7 @@ namespace AvalonDock.Controls
 	/// </summary>
 	/// <seealso cref="Window"/>
 	/// <seealso cref="ILayoutControl"/>
+	[TemplatePart(Name = "Header", Type = typeof(Border))]
 	public abstract class LayoutFloatingWindowControl : HandyControl.Controls.GlowWindow, ILayoutControl
 	{
 		#region fields
@@ -47,6 +53,8 @@ namespace AvalonDock.Controls
 		private DragService _dragService = null;
 		private bool _internalCloseFlag = false;
 		private bool _isClosing = false;
+		private static readonly PropertyInfo criticalHandlePropertyInfo = typeof(Window).GetProperty("CriticalHandle", BindingFlags.NonPublic | BindingFlags.Instance);
+		private static readonly object[] emptyObjectArray = new object[0];
 
 		/// <summary>
 		/// Is false until the margins have been found once.
@@ -60,6 +68,8 @@ namespace AvalonDock.Controls
 
 		static LayoutFloatingWindowControl()
 		{
+			BorderThicknessProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(new Thickness(0)));
+			WindowStyleProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(WindowStyle.None));
 			AllowsTransparencyProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false));
 			ContentProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(null, null, CoerceContentValue));
 			ShowInTaskbarProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false));
@@ -67,15 +77,25 @@ namespace AvalonDock.Controls
 
 		protected LayoutFloatingWindowControl(ILayoutElement model)
 		{
-			var chrome = new WindowChrome
+			var behavior = new WindowChromeBehavior()
+			{
+				TryToBeFlickerFree = true,
+				ResizeBorderThickness = new Thickness(0, 0, 0, 0),
+				KeepBorderOnMaximize = true
+			};
+
+			Interaction.GetBehaviors(this).Add(behavior);
+
+			var chrome = new System.Windows.Shell.WindowChrome
 			{
 				CornerRadius = new CornerRadius(),
 				GlassFrameThickness = new Thickness(0, 0, 0, 0),
 				ResizeBorderThickness = new Thickness(0, 0, 0, 0),
-				UseAeroCaptionButtons = false
+				UseAeroCaptionButtons = false,
+				CaptionHeight = 0
 			};
-			BindingOperations.SetBinding(chrome, WindowChrome.CaptionHeightProperty, new Binding(NonClientAreaHeightProperty.Name) { Source = this });
-			WindowChrome.SetWindowChrome(this, chrome);
+			//BindingOperations.SetBinding(chrome, WindowChrome.CaptionHeightProperty, new Binding(NonClientAreaHeightProperty.Name) { Source = this });
+			System.Windows.Shell.WindowChrome.SetWindowChrome(this, chrome);
 
 			Loaded += OnLoaded;
 			Unloaded += OnUnloaded;
@@ -91,6 +111,59 @@ namespace AvalonDock.Controls
 		}
 
 		#endregion Constructors
+
+		public override void OnApplyTemplate()
+		{
+			base.OnApplyTemplate();
+
+			var header = (Border)GetTemplateChild("Header");
+			if (header == null)
+				throw new Exception("Header not found.");
+			header.MouseLeftButtonDown += TitleBarGrid_OnMouseLeftButtonDown;
+		}
+
+#pragma warning disable 618
+		private void TitleBarGrid_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			if (e.ClickCount == 1)
+			{
+				e.Handled = true;
+
+				// taken from DragMove internal code
+				this.VerifyAccess();
+
+				// for the touch usage
+				UnsafeNativeMethods.ReleaseCapture();
+
+				var criticalHandle = (IntPtr)criticalHandlePropertyInfo.GetValue(this, emptyObjectArray);
+
+				// these lines are from DragMove
+				// NativeMethods.SendMessage(criticalHandle, WM.SYSCOMMAND, (IntPtr)SC.MOUSEMOVE, IntPtr.Zero);
+				// NativeMethods.SendMessage(criticalHandle, WM.LBUTTONUP, IntPtr.Zero, IntPtr.Zero);
+
+				var wpfPoint = this.PointToScreen(Mouse.GetPosition(this));
+				var x = (int)wpfPoint.X;
+				var y = (int)wpfPoint.Y;
+				NativeMethods.SendMessage(criticalHandle, WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, new IntPtr(x | (y << 16)));
+			}
+			else if (e.ClickCount == 2
+					 && this.ResizeMode != ResizeMode.NoResize)
+			{
+				e.Handled = true;
+
+				if (this.WindowState == WindowState.Normal
+					&& this.ResizeMode != ResizeMode.NoResize
+					&& this.ResizeMode != ResizeMode.CanMinimize)
+				{
+					SystemCommands.MaximizeWindow(this);
+				}
+				else
+				{
+					SystemCommands.RestoreWindow(this);
+				}
+			}
+		}
+#pragma warning restore 618
 
 		#region Properties
 
