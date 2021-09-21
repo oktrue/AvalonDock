@@ -23,6 +23,7 @@ namespace AvalonDock
 				  WS_CLIPSIBLINGS = 0x04000000,
 				  WS_CLIPCHILDREN = 0x02000000,
 				  WS_TABSTOP = 0x00010000,
+				  WS_MAXIMIZEBOX = 0x00010000,
 				  WS_GROUP = 0x00020000;
 
 		/// <summary>SetWindowPos Flags.</summary>

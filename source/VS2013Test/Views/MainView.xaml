@@ -13,7 +13,6 @@
 			   ActiveGlowColor="#1982C4"
 			   InactiveGlowColor="#3F3F46"
 			   BorderThickness="0"
-			   NonClientAreaHeight="{Binding ElementName=Header, Path=ActualHeight}"
 			   Title="VS2013Test" Width="1600" Height="900" SnapsToDevicePixels="True" Foreground="{DynamicResource WindowForeground}" Background="{DynamicResource HeaderBackground}" ResizeMode="CanResizeWithGrip">
 
 	<!--<WindowChrome.WindowChrome>

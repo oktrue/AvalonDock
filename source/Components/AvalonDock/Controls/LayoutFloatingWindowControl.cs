@@ -69,7 +69,7 @@ namespace AvalonDock.Controls
 		static LayoutFloatingWindowControl()
 		{
 			BorderThicknessProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(new Thickness(0)));
-			WindowStyleProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(WindowStyle.None));
+			WindowStyleProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(WindowStyle.SingleBorderWindow));
 			AllowsTransparencyProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false));
 			ContentProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(null, null, CoerceContentValue));
 			ShowInTaskbarProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false));
@@ -81,21 +81,22 @@ namespace AvalonDock.Controls
 			{
 				TryToBeFlickerFree = true,
 				ResizeBorderThickness = new Thickness(0, 0, 0, 0),
+				EnableMaxRestore = true,
 				KeepBorderOnMaximize = true
 			};
 
-			Interaction.GetBehaviors(this).Add(behavior);
+			//Interaction.GetBehaviors(this).Add(behavior);
 
-			var chrome = new System.Windows.Shell.WindowChrome
-			{
-				CornerRadius = new CornerRadius(),
-				GlassFrameThickness = new Thickness(0, 0, 0, 0),
-				ResizeBorderThickness = new Thickness(0, 0, 0, 0),
-				UseAeroCaptionButtons = false,
-				CaptionHeight = 0
-			};
+			//var chrome = new System.Windows.Shell.WindowChrome
+			//{
+			//	CornerRadius = new CornerRadius(),
+			//	GlassFrameThickness = new Thickness(0, 0, 0, 0),
+			//	ResizeBorderThickness = new Thickness(0, 0, 0, 0),
+			//	UseAeroCaptionButtons = false,
+			//	CaptionHeight = 0
+			//};
 			//BindingOperations.SetBinding(chrome, WindowChrome.CaptionHeightProperty, new Binding(NonClientAreaHeightProperty.Name) { Source = this });
-			System.Windows.Shell.WindowChrome.SetWindowChrome(this, chrome);
+			//System.Windows.Shell.WindowChrome.SetWindowChrome(this, chrome);
 
 			Loaded += OnLoaded;
 			Unloaded += OnUnloaded;
@@ -128,7 +129,7 @@ namespace AvalonDock.Controls
 			if (e.ClickCount == 1)
 			{
 				e.Handled = true;
-
+				
 				// taken from DragMove internal code
 				this.VerifyAccess();
 
@@ -155,10 +156,14 @@ namespace AvalonDock.Controls
 					&& this.ResizeMode != ResizeMode.NoResize
 					&& this.ResizeMode != ResizeMode.CanMinimize)
 				{
+					this.VerifyAccess();
+					UnsafeNativeMethods.ReleaseCapture();
 					SystemCommands.MaximizeWindow(this);
 				}
 				else
 				{
+					this.VerifyAccess();
+					UnsafeNativeMethods.ReleaseCapture();
 					SystemCommands.RestoreWindow(this);
 				}
 			}
@@ -430,6 +435,9 @@ namespace AvalonDock.Controls
 
 			switch (msg)
 			{
+				case 0x0083: // NCCALCSIZE
+					if (wParam != IntPtr.Zero) handled = true;
+					break;
 				case Win32Helper.WM_ACTIVATE:
 					if (((int)wParam & 0xFFFF) == Win32Helper.WA_INACTIVE)
 					{
@@ -607,14 +615,14 @@ namespace AvalonDock.Controls
 		/// <inheritdoc />
 		protected override void OnInitialized(EventArgs e)
 		{
-			CommandBindings.Add(new CommandBinding(Microsoft.Windows.Shell.SystemCommands.CloseWindowCommand,
-				(s, args) => Microsoft.Windows.Shell.SystemCommands.CloseWindow((Window)args.Parameter)));
-			CommandBindings.Add(new CommandBinding(Microsoft.Windows.Shell.SystemCommands.MaximizeWindowCommand,
-				(s, args) => Microsoft.Windows.Shell.SystemCommands.MaximizeWindow((Window)args.Parameter)));
-			CommandBindings.Add(new CommandBinding(Microsoft.Windows.Shell.SystemCommands.MinimizeWindowCommand,
-				(s, args) => Microsoft.Windows.Shell.SystemCommands.MinimizeWindow((Window)args.Parameter)));
-			CommandBindings.Add(new CommandBinding(Microsoft.Windows.Shell.SystemCommands.RestoreWindowCommand,
-				(s, args) => Microsoft.Windows.Shell.SystemCommands.RestoreWindow((Window)args.Parameter)));
+			CommandBindings.Add(new CommandBinding(SystemCommands.CloseWindowCommand,
+				(s, args) => SystemCommands.CloseWindow((Window)args.Parameter)));
+			CommandBindings.Add(new CommandBinding(SystemCommands.MaximizeWindowCommand,
+				(s, args) => SystemCommands.MaximizeWindow((Window)args.Parameter)));
+			CommandBindings.Add(new CommandBinding(SystemCommands.MinimizeWindowCommand,
+				(s, args) => SystemCommands.MinimizeWindow((Window)args.Parameter)));
+			CommandBindings.Add(new CommandBinding(SystemCommands.RestoreWindowCommand,
+				(s, args) => SystemCommands.RestoreWindow((Window)args.Parameter)));
 			//Debug.Assert(this.Owner != null);
 			base.OnInitialized(e);
 		}
@@ -816,7 +824,7 @@ namespace AvalonDock.Controls
 
 			/// <summary><see cref="SizeToContent"/> dependency property.</summary>
 			public static readonly DependencyProperty SizeToContentProperty = DependencyProperty.Register(nameof(SizeToContent), typeof(SizeToContent), typeof(FloatingWindowContentHost),
-					new FrameworkPropertyMetadata(SizeToContent.Manual, OnSizeToContentChanged));
+					new FrameworkPropertyMetadata(SizeToContent.WidthAndHeight, OnSizeToContentChanged));
 
 			/// <summary>Gets or sets the <see cref="SizeToContent"/> property.</summary>
 			public SizeToContent SizeToContent
@@ -846,7 +854,7 @@ namespace AvalonDock.Controls
 				_wpfContentHost = new HwndSource(new HwndSourceParameters
 				{
 					ParentWindow = hwndParent.Handle,
-					WindowStyle = Win32Helper.WS_CHILD | Win32Helper.WS_VISIBLE | Win32Helper.WS_CLIPSIBLINGS | Win32Helper.WS_CLIPCHILDREN,
+					WindowStyle = Win32Helper.WS_CHILD | Win32Helper.WS_VISIBLE | Win32Helper.WS_CLIPSIBLINGS | Win32Helper.WS_CLIPCHILDREN | Win32Helper.WS_MAXIMIZEBOX,
 					Width = 1,
 					Height = 1,
 					UsesPerPixelOpacity = true,
@@ -856,6 +864,7 @@ namespace AvalonDock.Controls
 				AutomationProperties.SetName(_rootPresenter, "FloatingWindowHost");
 				_rootPresenter.SetBinding(Border.BackgroundProperty, new Binding(nameof(Background)) { Source = _owner });
 				_wpfContentHost.RootVisual = _rootPresenter;
+				//_wpfContentHost.AddHook(WndProc1);
 				_manager = _owner.Model.Root.Manager;
 				_manager.InternalAddLogicalChild(_rootPresenter);
 				return new HandleRef(this, _wpfContentHost.Handle);
@@ -870,13 +879,32 @@ namespace AvalonDock.Controls
 				_wpfContentHost = null;
 			}
 
-			/// <inheritdoc />
-			protected override Size MeasureOverride(Size constraint)
+			protected IntPtr WndProc1(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
 			{
-				if (Content == null) return base.MeasureOverride(constraint);
-				Content.Measure(constraint);
-				return Content.DesiredSize;
+				switch ((uint)msg)
+				{
+					case 0x0083: // NCCALCSIZE
+						if (wParam != IntPtr.Zero)
+						{
+							handled = true;
+							var client = (RECT)Marshal.PtrToStructure(lParam, typeof(RECT));
+							client.Bottom -= 1;
+							Marshal.StructureToPtr(client, lParam, false);
+						}
+						break;
+					default:
+						break;
+				}
+				return IntPtr.Zero;
 			}
+
+			/// <inheritdoc />
+			//protected override Size MeasureOverride(Size constraint)
+			//{
+			//	if (Content == null) return base.MeasureOverride(constraint);
+			//	Content.Measure(constraint);
+			//	return Content.DesiredSize;
+			//}
 
 			#endregion Overrides
 
@@ -887,8 +915,8 @@ namespace AvalonDock.Controls
 			/// </summary>
 			private void Content_SizeChanged(object sender, SizeChangedEventArgs e)
 			{
-				InvalidateMeasure();
-				InvalidateArrange();
+				//InvalidateMeasure();
+				//InvalidateArrange();
 			}
 
 			#endregion Methods

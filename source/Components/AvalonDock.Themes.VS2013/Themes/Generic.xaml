@@ -1792,7 +1792,7 @@
 		<Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingDocumentWindowBackground}}" />
 		<Setter Property="ActiveGlowColor" Value="#3F3F46" />
 		<Setter Property="InactiveGlowColor" Value="#3F3F46" />
-		<Setter Property="NonClientAreaHeight" Value="32" />
+		<!--<Setter Property="NonClientAreaHeight" Value="32" />-->
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}">
@@ -2048,7 +2048,7 @@
 		<Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBackground}}" />
 		<Setter Property="ActiveGlowColor" Value="#3F3F46" />
 		<Setter Property="InactiveGlowColor" Value="#3F3F46" />
-		<Setter Property="NonClientAreaHeight" Value="0" />
+		<!--<Setter Property="NonClientAreaHeight" Value="0" />-->
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableFloatingWindowControl}">

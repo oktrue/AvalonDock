@@ -15,15 +15,15 @@ namespace AvalonDock.VS2013Test.Views
         {
             InitializeComponent();
 
-			var chrome = new WindowChrome
-			{
-				CornerRadius = new CornerRadius(),
-				GlassFrameThickness = new Thickness(0, 0, 0, 0),
-				ResizeBorderThickness = new Thickness(0, 0, 0, 0),
-				UseAeroCaptionButtons = false
-			};
-			BindingOperations.SetBinding(chrome, WindowChrome.CaptionHeightProperty, new Binding(NonClientAreaHeightProperty.Name) { Source = this });
-			WindowChrome.SetWindowChrome(this, chrome);
+			//var chrome = new WindowChrome
+			//{
+			//	CornerRadius = new CornerRadius(),
+			//	GlassFrameThickness = new Thickness(0, 0, 0, 0),
+			//	ResizeBorderThickness = new Thickness(0, 0, 0, 0),
+			//	UseAeroCaptionButtons = false
+			//};
+			//BindingOperations.SetBinding(chrome, WindowChrome.CaptionHeightProperty, new Binding(NonClientAreaHeightProperty.Name) { Source = this });
+			//WindowChrome.SetWindowChrome(this, chrome);
 
 			DataContext = Workspace.This;
 		}
