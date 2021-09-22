@@ -9,7 +9,7 @@
 			   xmlns:icons="clr-namespace:VS2013Test.Icons"
 			   mc:Ignorable="d"
 			   d:DataContext="{d:DesignInstance viewModels:Workspace, IsDesignTimeCreatable=True}"
-			   d:WindowStyle="None"
+
 			   ActiveGlowColor="#1982C4"
 			   InactiveGlowColor="#3F3F46"
 			   BorderThickness="0"
@@ -124,10 +124,10 @@
 			</StackPanel>
 
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
-				<Button Style="{StaticResource MinimizeButton}" Command="SystemCommands.MinimizeWindowCommand" />
-				<Button Style="{StaticResource MaximizeButton}" Command="SystemCommands.MaximizeWindowCommand" />
-				<Button Style="{StaticResource RestoreDownButton}" Command="SystemCommands.RestoreWindowCommand" />
-				<Button Style="{StaticResource CloseButton}" Command="SystemCommands.CloseWindowCommand" />
+				<Button Style="{StaticResource MinimizeButton}" Command="{x:Static SystemCommands.MinimizeWindowCommand}" />
+				<Button Style="{StaticResource MaximizeButton}" Command="{x:Static SystemCommands.MaximizeWindowCommand}" />
+				<Button Style="{StaticResource RestoreDownButton}" Command="{x:Static SystemCommands.RestoreWindowCommand}" />
+				<Button Style="{StaticResource CloseButton}" Command="{x:Static SystemCommands.CloseWindowCommand}" />
 			</StackPanel>
 		</Grid>
 
