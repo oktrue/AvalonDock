@@ -21,15 +21,11 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-//using System.Windows.Shell;
 using ControlzEx.Behaviors;
 using Microsoft.Xaml.Behaviors;
 using System.Reflection;
 using ControlzEx.Native;
 using ControlzEx.Standard;
-using Windows.Win32;
-using Windows.Win32.Foundation;
-using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace AvalonDock.Controls
 {
@@ -72,8 +68,6 @@ namespace AvalonDock.Controls
 		static LayoutFloatingWindowControl()
 		{
 			BorderThicknessProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(new Thickness(0)));
-			//WindowStyleProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(WindowStyle.None));
-			//ResizeModeProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(ResizeMode.NoResize));
 			AllowsTransparencyProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false));
 			ContentProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(null, null, CoerceContentValue));
 			ShowInTaskbarProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false));
@@ -81,27 +75,6 @@ namespace AvalonDock.Controls
 
 		protected LayoutFloatingWindowControl(ILayoutElement model)
 		{
-			var behavior = new WindowChromeBehavior()
-			{
-				TryToBeFlickerFree = true,
-				ResizeBorderThickness = new Thickness(0, 0, 0, 0),
-				EnableMaxRestore = true,
-				KeepBorderOnMaximize = true
-			};
-
-			//Interaction.GetBehaviors(this).Add(behavior);
-
-			var chrome = new System.Windows.Shell.WindowChrome
-			{
-				CornerRadius = new CornerRadius(),
-				GlassFrameThickness = new Thickness(0, 0, 0, 0),
-				ResizeBorderThickness = new Thickness(0, 0, 0, 0),
-				UseAeroCaptionButtons = false,
-				CaptionHeight = 0
-			};
-			//BindingOperations.SetBinding(chrome, WindowChrome.CaptionHeightProperty, new Binding(NonClientAreaHeightProperty.Name) { Source = this });
-			//System.Windows.Shell.WindowChrome.SetWindowChrome(this, chrome);
-
 			Loaded += OnLoaded;
 			Unloaded += OnUnloaded;
 			Closing += OnClosing;
@@ -124,11 +97,11 @@ namespace AvalonDock.Controls
 			var header = (Border)GetTemplateChild("Header");
 			if (header == null)
 				throw new Exception("Header not found.");
-			header.MouseLeftButtonDown += TitleBarGrid_OnMouseLeftButtonDown;
+			header.MouseLeftButtonDown += Header_OnMouseLeftButtonDown;
 		}
 
 #pragma warning disable 618
-		private void TitleBarGrid_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		private void Header_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			if (e.ClickCount == 1)
 			{
@@ -160,14 +133,10 @@ namespace AvalonDock.Controls
 					&& this.ResizeMode != ResizeMode.NoResize
 					&& this.ResizeMode != ResizeMode.CanMinimize)
 				{
-					this.VerifyAccess();
-					UnsafeNativeMethods.ReleaseCapture();
 					SystemCommands.MaximizeWindow(this);
 				}
 				else
 				{
-					this.VerifyAccess();
-					UnsafeNativeMethods.ReleaseCapture();
 					SystemCommands.RestoreWindow(this);
 				}
 			}
@@ -428,13 +397,6 @@ namespace AvalonDock.Controls
 			else
 			{
 				var windowHandle = new WindowInteropHelper(this).Handle;
-				//TODO: TestStyles
-				//var hwnd = _hwndSrc.Handle;
-				//var ws_ex = PInvoke.GetWindowLong((HWND)hwnd, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
-				//var ws = PInvoke.GetWindowLong((HWND)hwnd, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
-				PInvoke.SetWindowLong((HWND)windowHandle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (int)WINDOW_EX_STYLE.WS_EX_LEFT | (int)WINDOW_EX_STYLE.WS_EX_LTRREADING | (int)WINDOW_EX_STYLE.WS_EX_RIGHTSCROLLBAR | (int)WINDOW_EX_STYLE.WS_EX_WINDOWEDGE);
-				PInvoke.SetWindowLong((HWND)windowHandle, WINDOW_LONG_PTR_INDEX.GWL_STYLE, (int)WINDOW_STYLE.WS_CAPTION | (int)WINDOW_STYLE.WS_VISIBLE | (int)WINDOW_STYLE.WS_CLIPSIBLINGS | (int)WINDOW_STYLE.WS_CLIPCHILDREN | (int)WINDOW_STYLE.WS_SYSMENU | (int)WINDOW_STYLE.WS_THICKFRAME | (int)WINDOW_STYLE.WS_OVERLAPPED | (int)WINDOW_STYLE.WS_MINIMIZEBOX | (int)WINDOW_STYLE.WS_MAXIMIZEBOX);
-				//Win32Helper.SendMessage(windowHandle, 0x0083, (IntPtr)1, IntPtr.Zero);
 				var lParam = new IntPtr(((int)Left & 0xFFFF) | ((int)Top << 16));
 				Win32Helper.SendMessage(windowHandle, Win32Helper.WM_NCLBUTTONDOWN, new IntPtr(Win32Helper.HT_CAPTION), lParam);
 			}
@@ -729,8 +691,8 @@ namespace AvalonDock.Controls
 			//var hwnd = _hwndSrc.Handle;
 			//var ws_ex = PInvoke.GetWindowLong((HWND)hwnd, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
 			//var ws = PInvoke.GetWindowLong((HWND)hwnd, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
-			PInvoke.SetWindowLong((HWND)windowHandle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (int)WINDOW_EX_STYLE.WS_EX_LEFT | (int)WINDOW_EX_STYLE.WS_EX_LTRREADING | (int)WINDOW_EX_STYLE.WS_EX_RIGHTSCROLLBAR | (int)WINDOW_EX_STYLE.WS_EX_WINDOWEDGE);
-			PInvoke.SetWindowLong((HWND)windowHandle, WINDOW_LONG_PTR_INDEX.GWL_STYLE, (int)WINDOW_STYLE.WS_CAPTION | (int)WINDOW_STYLE.WS_VISIBLE | (int)WINDOW_STYLE.WS_CLIPSIBLINGS | (int)WINDOW_STYLE.WS_CLIPCHILDREN | (int)WINDOW_STYLE.WS_SYSMENU | (int)WINDOW_STYLE.WS_THICKFRAME | (int)WINDOW_STYLE.WS_OVERLAPPED | (int)WINDOW_STYLE.WS_MINIMIZEBOX | (int)WINDOW_STYLE.WS_MAXIMIZEBOX);
+			//_ = PInvoke.SetWindowLong((HWND)windowHandle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (int)WINDOW_EX_STYLE.WS_EX_LEFT | (int)WINDOW_EX_STYLE.WS_EX_LTRREADING | (int)WINDOW_EX_STYLE.WS_EX_RIGHTSCROLLBAR | (int)WINDOW_EX_STYLE.WS_EX_WINDOWEDGE);
+			//_ = PInvoke.SetWindowLong((HWND)windowHandle, WINDOW_LONG_PTR_INDEX.GWL_STYLE, (int)WINDOW_STYLE.WS_CAPTION | (int)WINDOW_STYLE.WS_VISIBLE | (int)WINDOW_STYLE.WS_CLIPSIBLINGS | (int)WINDOW_STYLE.WS_CLIPCHILDREN | (int)WINDOW_STYLE.WS_SYSMENU | (int)WINDOW_STYLE.WS_THICKFRAME | (int)WINDOW_STYLE.WS_OVERLAPPED | (int)WINDOW_STYLE.WS_MINIMIZEBOX | (int)WINDOW_STYLE.WS_MAXIMIZEBOX);
 			Win32Helper.SetWindowPos(windowHandle, IntPtr.Zero, 0, 0, 0, 0, Win32Helper.SetWindowPosFlags.IgnoreZOrder | Win32Helper.SetWindowPosFlags.IgnoreMove | Win32Helper.SetWindowPosFlags.IgnoreResize | Win32Helper.SetWindowPosFlags.DoNotActivate | Win32Helper.SetWindowPosFlags.DrawFrame);
 			var lParam = new IntPtr(((int)mousePosition.X & 0xFFFF) | ((int)mousePosition.Y << 16));
 			Win32Helper.SendMessage(windowHandle, Win32Helper.WM_NCLBUTTONDOWN, new IntPtr(Win32Helper.HT_CAPTION), lParam);

@@ -9,15 +9,10 @@
 			   xmlns:icons="clr-namespace:VS2013Test.Icons"
 			   mc:Ignorable="d"
 			   d:DataContext="{d:DesignInstance viewModels:Workspace, IsDesignTimeCreatable=True}"
-
-			   ActiveGlowColor="#1982C4"
-			   InactiveGlowColor="#3F3F46"
+			   ActiveGlowColor="{DynamicResource WindowBorderColor}"
+			   InactiveGlowColor="{DynamicResource WindowInactiveBorderColor}"
 			   BorderThickness="0"
 			   Title="VS2013Test" Width="1600" Height="900" SnapsToDevicePixels="True" Foreground="{DynamicResource WindowForeground}" Background="{DynamicResource HeaderBackground}" ResizeMode="CanResizeWithGrip">
-
-	<!--<WindowChrome.WindowChrome>
-		<WindowChrome x:Name="chrome" ResizeBorderThickness="0" CornerRadius="0" GlassFrameThickness="0" />
-	</WindowChrome.WindowChrome>-->
 
 	<Grid>
 		<Grid.Style>
@@ -36,7 +31,7 @@
 			<RowDefinition Height="23"/>
 		</Grid.RowDefinitions>
 
-		<Grid x:Name="Header">
+		<Grid x:Name="Header" Background="Transparent" MouseLeftButtonDown="Header_OnMouseLeftButtonDown">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="4"/>
@@ -58,7 +53,7 @@
 					</UserControl.Style>
 				</icons:VisualStudioIcon>
 
-				<Menu Style="{DynamicResource MetroMenu}" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True">
+				<Menu Style="{DynamicResource MetroMenu}" VerticalAlignment="Center">
 					<MenuItem Header="File">
 						<MenuItem Command="{Binding NewCommand}" Header="New" />
 						<MenuItem Command="{Binding OpenCommand}" Header="Open" />
@@ -123,7 +118,7 @@
 				</Rectangle>
 			</StackPanel>
 
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 				<Button Style="{StaticResource MinimizeButton}" Command="{x:Static SystemCommands.MinimizeWindowCommand}" />
 				<Button Style="{StaticResource MaximizeButton}" Command="{x:Static SystemCommands.MaximizeWindowCommand}" />
 				<Button Style="{StaticResource RestoreDownButton}" Command="{x:Static SystemCommands.RestoreWindowCommand}" />

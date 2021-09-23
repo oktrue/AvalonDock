@@ -947,7 +947,6 @@
 									</Border>
 									<Button
 										Grid.Column="1"
-										WindowChrome.IsHitTestVisibleInChrome="True"
 										Command="{x:Static SystemCommands.MaximizeWindowCommand}"
 										CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
@@ -959,7 +958,6 @@
 
 									<Button
 										Grid.Column="1"
-										WindowChrome.IsHitTestVisibleInChrome="True"
 										Command="{x:Static SystemCommands.RestoreWindowCommand}"
 										CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
@@ -971,7 +969,6 @@
 
 									<Button
 										Grid.Column="2"
-										WindowChrome.IsHitTestVisibleInChrome="True"
 										Command="{Binding Path=CloseWindowCommand, RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
 										Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
@@ -1037,7 +1034,6 @@
 									<avalonDockControls:DropDownButton
 										x:Name="SinglePaneContextMenu"
 										Grid.Column="1"
-										WindowChrome.IsHitTestVisibleInChrome="True"
 										DropDownContextMenu="{Binding Model.Root.Manager.AnchorableContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
 										DropDownContextMenuDataContext="{Binding Path=SingleContentLayoutItem, RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
@@ -1049,7 +1045,6 @@
 
 									<Button
 										Grid.Column="2"
-										WindowChrome.IsHitTestVisibleInChrome="True"
 										Command="{x:Static SystemCommands.MaximizeWindowCommand}"
 										CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
@@ -1061,7 +1056,6 @@
 
 									<Button
 										Grid.Column="2"
-										WindowChrome.IsHitTestVisibleInChrome="True"
 										Command="{x:Static SystemCommands.RestoreWindowCommand}"
 										CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
@@ -1074,7 +1068,6 @@
 									<Button
 										x:Name="CloseButton"
 										Grid.Column="3"
-										WindowChrome.IsHitTestVisibleInChrome="True"
 										Command="{Binding HideWindowCommand, RelativeSource={RelativeSource TemplatedParent}}"
 										Focusable="False"
 										Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"

@@ -1,6 +1,0 @@
-//Methods
-SetWindowLong
-
-//Constants
-WINDOW_STYLE
-WINDOW_EX_STYLE

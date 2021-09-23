@@ -22,4 +22,7 @@
 	<SolidColorBrush x:Key="ScrollViewerRectBackground" Color="#F5F5F5" />
 	<SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type MLib_reskeys:ResourceKeys}, ResourceId=NormalBackgroundBrushKey}" Color="Transparent" />
 	<SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type MLib_reskeys:ResourceKeys}, ResourceId=TopLevelHeaderMenuBackgroundKey}" Color="Transparent" />
+
+	<Color x:Key="WindowBorderColor">#1F3C76</Color>
+	<Color x:Key="WindowInactiveBorderColor">#515151</Color>
 </ResourceDictionary>
