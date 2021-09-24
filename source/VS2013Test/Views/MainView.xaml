@@ -8,6 +8,7 @@
 			   xmlns:viewModels="clr-namespace:AvalonDock.VS2013Test.ViewModels"
 			   xmlns:icons="clr-namespace:VS2013Test.Icons"
 			   mc:Ignorable="d"
+			   d:WindowStyle="None"
 			   d:DataContext="{d:DesignInstance viewModels:Workspace, IsDesignTimeCreatable=True}"
 			   ActiveGlowColor="{DynamicResource WindowBorderColor}"
 			   InactiveGlowColor="{DynamicResource WindowInactiveBorderColor}"
@@ -18,7 +19,7 @@
 		<Grid.Style>
 			<Style TargetType="{x:Type Grid}">
 				<Style.Triggers>
-					<DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=hc:GlowWindow}}" Value="Maximized">
+					<DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Maximized">
 						<Setter Property="Margin" Value="8" />
 					</DataTrigger>
 				</Style.Triggers>
@@ -31,27 +32,28 @@
 			<RowDefinition Height="23"/>
 		</Grid.RowDefinitions>
 
-		<Grid x:Name="Header" Background="Transparent" MouseLeftButtonDown="Header_OnMouseLeftButtonDown">
+		<Grid x:Name="Header" Background="Transparent" MouseLeftButtonDown="Header_OnMouseLeftButtonDown" MouseRightButtonUp="Header_OnMouseRightButtonUp">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="4"/>
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
-			<StackPanel Margin="8,4" HorizontalAlignment="Left" Orientation="Horizontal">
-				<icons:VisualStudioIcon Margin="4,0" Height="20">
-					<UserControl.Style>
-						<Style TargetType="{x:Type UserControl}">
-							<Setter Property="Foreground" Value="{DynamicResource IconBrush}"/>
-
-							<Style.Triggers>
-								<DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Value="False">
-									<Setter Property="Foreground" Value="{DynamicResource IconInactiveBrush}" />
-								</DataTrigger>
-							</Style.Triggers>
-						</Style>
-					</UserControl.Style>
-				</icons:VisualStudioIcon>
+			<StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+				<Border Background="Transparent" MouseLeftButtonDown="Icon_OnMouseLeftButtonDown">
+					<icons:VisualStudioIcon Padding="12,0,4,0" Height="20">
+						<UserControl.Style>
+							<Style TargetType="{x:Type UserControl}">
+								<Setter Property="Foreground" Value="{DynamicResource IconBrush}"/>
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Value="False">
+										<Setter Property="Foreground" Value="{DynamicResource IconInactiveBrush}" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</UserControl.Style>
+					</icons:VisualStudioIcon>
+				</Border>
 
 				<Menu Style="{DynamicResource MetroMenu}" VerticalAlignment="Center">
 					<MenuItem Header="File">
@@ -74,14 +76,14 @@
 					</MenuItem>
 				</Menu>
 
-				<ComboBox 
-					Margin="4,0"
-					WindowChrome.IsHitTestVisibleInChrome="True"
-					DisplayMemberPath="Item1"
-					ItemsSource="{Binding Themes}"
-					SelectedItem="{Binding SelectedTheme}" />
+				<ComboBox Margin="4,0"
+						  VerticalAlignment="Center"
+						  WindowChrome.IsHitTestVisibleInChrome="True"					
+						  DisplayMemberPath="Item1"				
+						  ItemsSource="{Binding Themes}"					
+						  SelectedItem="{Binding SelectedTheme}" />
 
-				<Border Background="{DynamicResource ProjectNameBackground}" Padding="8,0" Margin="14,0">
+				<Border Background="{DynamicResource ProjectNameBackground}" Padding="8,0" Margin="16,4">
 					<TextBlock Text="VS2013 Demo" VerticalAlignment="Center" Padding="0,1,0,0">
 						<TextBlock.Style>
 							<Style TargetType="TextBlock">

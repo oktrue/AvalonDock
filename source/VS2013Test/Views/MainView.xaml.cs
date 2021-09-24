@@ -1,9 +1,10 @@
 using System;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Shell;
+using System.Windows.Media;
 using AvalonDock.VS2013Test.ViewModels;
 using ControlzEx.Native;
 using ControlzEx.Standard;
@@ -15,87 +16,72 @@ namespace AvalonDock.VS2013Test.Views
 	/// </summary>
 	public partial class MainView
 	{
-		private static readonly PropertyInfo criticalHandlePropertyInfo = typeof(Window).GetProperty("CriticalHandle", BindingFlags.NonPublic | BindingFlags.Instance);
-		private static readonly object[] emptyObjectArray = new object[0];
-
 		public MainView()
-        {
-            InitializeComponent();
+		{
+			InitializeComponent();
 			DataContext = Workspace.This;
-
-			var chrome = new WindowChrome
-			{
-				CornerRadius = new CornerRadius(),
-				GlassFrameThickness = new Thickness(0, 0, 0, 0),
-				ResizeBorderThickness = new Thickness(0, 0, 0, 0),
-				CaptionHeight = 0,
-				UseAeroCaptionButtons = false
-			};
-			//WindowChrome.SetWindowChrome(this, chrome);
 		}
+
+		//TODO: Move code below to a new base window class and inherit GlowWindow from it
+		#region CustomWindowChrome
+
+		private static readonly PropertyInfo criticalHandlePropertyInfo = typeof(Window).GetProperty("CriticalHandle", BindingFlags.NonPublic | BindingFlags.Instance);
+#if NET452
+		private static readonly object[] emptyObjectArray = new object[0];
+#else
+		private static readonly object[] emptyObjectArray = Array.Empty<object>();
+#endif
+
+#pragma warning disable 618
+
+		private const SWP _SwpFlags = SWP.FRAMECHANGED | SWP.NOSIZE | SWP.NOMOVE | SWP.NOZORDER | SWP.NOOWNERZORDER | SWP.NOACTIVATE;
 
 		protected override void OnSourceInitialized(EventArgs e)
 		{
 			base.OnSourceInitialized(e);
-			var hwnd = PresentationSource.FromDependencyObject(this) as HwndSource;
-			hwnd.CompositionTarget.BackgroundColor = System.Windows.Media.Colors.Transparent;
-			hwnd.AddHook(FilterMessage);
+			HwndSource hwnd = PresentationSource.FromDependencyObject(this) as HwndSource;
+			hwnd.AddHook(WndProc);
+			hwnd.CompositionTarget.BackgroundColor = Colors.Transparent;
+			MARGINS dwmMargin = new MARGINS();
+			NativeMethods.DwmExtendFrameIntoClientArea(hwnd.Handle, ref dwmMargin);
+			NativeMethods.SetWindowPos(hwnd.Handle, IntPtr.Zero, 0, 0, 0, 0, _SwpFlags);
 		}
 
-		protected virtual IntPtr FilterMessage(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+		protected virtual IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
 		{
-			handled = false;
-
 			switch (msg)
 			{
-				case 0x0083: // NCCALCSIZE
-					if (wParam != IntPtr.Zero) handled = true;
+				case (int)WM.NCCALCSIZE:
+					if (wParam != IntPtr.Zero)
+					{
+						handled = true;
+					}
 					break;
-				case 0x0014: //WM_ERASEBKGND:
-							 //hdc = (HDC)wParam;
-							 //GetClientRect(hwnd, &rc);
-							 //SetMapMode(hdc, MM_ANISOTROPIC);
-							 //SetWindowExtEx(hdc, 100, 100, NULL);
-							 //SetViewportExtEx(hdc, rc.right, rc.bottom, NULL);
-							 //FillRect(hdc, &rc, hbrWhite);
-					//handled = true;
+				default:
 					break;
 			}
 			return IntPtr.Zero;
 		}
 
-#pragma warning disable 618
 		private void Header_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			if (e.ClickCount == 1)
 			{
 				e.Handled = true;
 
-				// taken from DragMove internal code
-				this.VerifyAccess();
-
-				// for the touch usage
-				UnsafeNativeMethods.ReleaseCapture();
-
-				var criticalHandle = (IntPtr)criticalHandlePropertyInfo.GetValue(this, emptyObjectArray);
-
-				// these lines are from DragMove
-				// NativeMethods.SendMessage(criticalHandle, WM.SYSCOMMAND, (IntPtr)SC.MOUSEMOVE, IntPtr.Zero);
-				// NativeMethods.SendMessage(criticalHandle, WM.LBUTTONUP, IntPtr.Zero, IntPtr.Zero);
-
-				var wpfPoint = this.PointToScreen(Mouse.GetPosition(this));
-				var x = (int)wpfPoint.X;
-				var y = (int)wpfPoint.Y;
-				NativeMethods.SendMessage(criticalHandle, WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, new IntPtr(x | (y << 16)));
+				VerifyAccess();
+				_ = UnsafeNativeMethods.ReleaseCapture();
+				IntPtr criticalHandle = (IntPtr)criticalHandlePropertyInfo.GetValue(this, emptyObjectArray);
+				Point wpfPoint = PointToScreen(Mouse.GetPosition(this));
+				int x = (int)wpfPoint.X;
+				int y = (int)wpfPoint.Y;
+				_ = NativeMethods.SendMessage(criticalHandle, WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, new IntPtr(x | (y << 16)));
 			}
-			else if (e.ClickCount == 2
-					 && this.ResizeMode != ResizeMode.NoResize)
+			else if (e.ClickCount == 2 && ResizeMode != ResizeMode.NoResize)
 			{
 				e.Handled = true;
 
-				if (this.WindowState == WindowState.Normal
-					&& this.ResizeMode != ResizeMode.NoResize
-					&& this.ResizeMode != ResizeMode.CanMinimize)
+				if (WindowState == WindowState.Normal && ResizeMode != ResizeMode.NoResize && ResizeMode != ResizeMode.CanMinimize)
 				{
 					SystemCommands.MaximizeWindow(this);
 				}
@@ -105,9 +91,25 @@ namespace AvalonDock.VS2013Test.Views
 				}
 			}
 		}
+
+		private void Header_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			ControlzEx.Windows.Shell.SystemCommands.ShowSystemMenu(this, e);
+		}
+
+		private void Icon_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			Border icon = sender as Border;
+			Point p = icon.TransformToAncestor(this).Transform(new Point(0, icon.ActualHeight));
+			ControlzEx.Windows.Shell.SystemCommands.ShowSystemMenu(this, p);
+		}
+
 #pragma warning restore 618
 
+		#endregion
+
 		#region SystemCommands
+
 		protected override void OnInitialized(EventArgs e)
 		{
 			_ = CommandBindings.Add(new CommandBinding(SystemCommands.CloseWindowCommand, OnCloseWindow));
@@ -147,6 +149,7 @@ namespace AvalonDock.VS2013Test.Views
 		{
 			SystemCommands.RestoreWindow(this);
 		}
+
 		#endregion
 	}
 }

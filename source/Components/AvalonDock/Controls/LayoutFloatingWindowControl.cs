@@ -21,8 +21,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using ControlzEx.Behaviors;
-using Microsoft.Xaml.Behaviors;
 using System.Reflection;
 using ControlzEx.Native;
 using ControlzEx.Standard;
