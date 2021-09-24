@@ -99,9 +99,16 @@ namespace AvalonDock.VS2013Test.Views
 
 		private void Icon_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			Border icon = sender as Border;
-			Point p = icon.TransformToAncestor(this).Transform(new Point(0, icon.ActualHeight));
-			ControlzEx.Windows.Shell.SystemCommands.ShowSystemMenu(this, p);
+			if (e.ClickCount == 1)
+			{
+				Border icon = sender as Border;
+				Point p = icon.TransformToAncestor(this).Transform(new Point(0, icon.ActualHeight));
+				ControlzEx.Windows.Shell.SystemCommands.ShowSystemMenu(this, p);
+			}
+			else if (e.ClickCount == 2)
+			{
+				Application.Current.Shutdown();
+			}
 		}
 
 #pragma warning restore 618
