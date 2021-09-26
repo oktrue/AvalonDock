@@ -1791,6 +1791,8 @@
 		<Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingDocumentWindowBackground}}" />
 		<Setter Property="ActiveGlowColor" Value="#3F3F46" />
 		<Setter Property="InactiveGlowColor" Value="#3F3F46" />
+		<Setter Property="OwnedByDockingManagerWindow" Value="False" />
+		<Setter Property="AllowMinimize" Value="True" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}">
@@ -1812,6 +1814,7 @@
 									<ColumnDefinition Width="*" />
 									<ColumnDefinition Width="Auto" />
 									<ColumnDefinition Width="Auto" />
+									<ColumnDefinition Width="Auto" />
 								</Grid.ColumnDefinitions>
 								<ContentPresenter
 									TextElement.Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabSelectedInactiveText}}"
@@ -1822,8 +1825,31 @@
 									ContentTemplateSelector="{Binding Model.Root.Manager.DocumentTitleTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}" />
 
 								<Button
-									x:Name="PART_PinMaximize"
+									x:Name="PART_PinMinimize"
 									Grid.Column="1"
+                                    Width="34"
+									Height="26"
+									VerticalAlignment="Top"
+									Command="{x:Static SystemCommands.MinimizeWindowCommand}"
+									CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+									Focusable="False"
+									Style="{StaticResource AvalonDockThemeVs2013ButtonStyle}"
+									ToolTip="Minimize">
+									<Path
+										x:Name="PART_ImgPinMinimize"
+										Width="9"
+										Height="9"
+										Margin="0,8,0,0"
+										RenderOptions.EdgeMode="Aliased"
+										VerticalAlignment="Center"
+										Data="{DynamicResource PinMinimize}"
+										Fill="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedInactiveGlyph}}"
+										Stretch="Uniform" />
+								</Button>
+								
+								<Button
+									x:Name="PART_PinMaximize"
+									Grid.Column="2"
                                     Width="34"
 									Height="26"
 									VerticalAlignment="Top"
@@ -1846,7 +1872,7 @@
 
 								<Button
 									x:Name="PART_PinRestore"
-									Grid.Column="1"
+									Grid.Column="2"
                                     Width="34"
 									Height="26"
                                     VerticalAlignment="Top"
@@ -1868,7 +1894,7 @@
 
 								<Button
 									x:Name="PART_PinClose"
-									Grid.Column="2"
+									Grid.Column="3"
                                     Width="34"
 									Height="26"
 									VerticalAlignment="Top"
@@ -1906,6 +1932,14 @@
 						<!--  Document Well : Tab : Button / Selected, inactive, hovered  -->
 						<MultiDataTrigger>
 							<MultiDataTrigger.Conditions>
+								<Condition Binding="{Binding IsMouseOver, ElementName=PART_PinMinimize}" Value="True" />
+							</MultiDataTrigger.Conditions>
+							<Setter TargetName="PART_PinMinimize" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedInactiveHoveredBackground}}" />
+							<Setter TargetName="PART_PinMinimize" Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedInactiveHoveredBorder}}" />
+							<Setter TargetName="PART_ImgPinMinimize" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedInactiveHoveredGlyph}}" />
+						</MultiDataTrigger>
+						<MultiDataTrigger>
+							<MultiDataTrigger.Conditions>
 								<Condition Binding="{Binding IsMouseOver, ElementName=PART_PinMaximize}" Value="True" />
 							</MultiDataTrigger.Conditions>
 							<Setter TargetName="PART_PinMaximize" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedInactiveHoveredBackground}}" />
@@ -1930,6 +1964,14 @@
 						</MultiDataTrigger>
 
 						<!--  Document Well : Tab : Button / Selected, inactive, pressed  -->
+						<MultiDataTrigger>
+							<MultiDataTrigger.Conditions>
+								<Condition Binding="{Binding IsMouseCaptured, ElementName=PART_PinMinimize}" Value="True" />
+							</MultiDataTrigger.Conditions>
+							<Setter TargetName="PART_PinMinimize" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedInactivePressedBackground}}" />
+							<Setter TargetName="PART_PinMinimize" Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedInactivePressedBorder}}" />
+							<Setter TargetName="PART_ImgPinMinimize" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedInactivePressedGlyph}}" />
+						</MultiDataTrigger>
 						<MultiDataTrigger>
 							<MultiDataTrigger.Conditions>
 								<Condition Binding="{Binding IsMouseCaptured, ElementName=PART_PinMaximize}" Value="True" />
@@ -1999,6 +2041,17 @@
                         </MultiDataTrigger>-->
 
 						<!--  Document Well : Tab : Button / Selected, active, pressed  -->
+						<!--  Highlight Minimize Button of Floating Window on MouseClick and Holding Bottun (even when Mouse is moved away)  -->
+						<MultiDataTrigger>
+							<MultiDataTrigger.Conditions>
+								<Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsActive}" Value="true" />
+								<Condition Binding="{Binding IsMouseCaptured, ElementName=PART_PinMinimize}" Value="True" />
+							</MultiDataTrigger.Conditions>
+							<Setter TargetName="PART_PinMinimize" Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedActivePressedBackground}}" />
+							<Setter TargetName="PART_PinMinimize" Property="BorderBrush" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedActivePressedBorder}}" />
+							<Setter TargetName="PART_ImgPinMinimize" Property="Fill" Value="{DynamicResource {x:Static reskeys:ResourceKeys.DocumentWellTabButtonSelectedActivePressedGlyph}}" />
+						</MultiDataTrigger>
+						
 						<!--  Highlight Maximize Button of Floating Window on MouseClick and Holding Bottun (even when Mouse is moved away)  -->
 						<MultiDataTrigger>
 							<MultiDataTrigger.Conditions>
