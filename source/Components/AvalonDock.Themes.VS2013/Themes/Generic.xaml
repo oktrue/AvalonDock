@@ -1793,6 +1793,7 @@
 		<Setter Property="InactiveGlowColor" Value="#3F3F46" />
 		<Setter Property="OwnedByDockingManagerWindow" Value="False" />
 		<Setter Property="AllowMinimize" Value="True" />
+		<Setter Property="ShowInTaskbar" Value="True" />
 		<Setter Property="Title" Value="{Binding RelativeSource={RelativeSource Self}, Path=Model.SinglePane.SelectedContent.Title}" />
 		<Setter Property="Template">
 			<Setter.Value>
@@ -2097,6 +2098,7 @@
 		<Setter Property="Background" Value="{DynamicResource {x:Static reskeys:ResourceKeys.FloatingToolWindowBackground}}" />
 		<Setter Property="ActiveGlowColor" Value="#3F3F46" />
 		<Setter Property="InactiveGlowColor" Value="#3F3F46" />
+		<Setter Property="ShowInTaskbar" Value="False" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableFloatingWindowControl}">
