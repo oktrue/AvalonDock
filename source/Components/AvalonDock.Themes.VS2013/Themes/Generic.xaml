@@ -1793,6 +1793,7 @@
 		<Setter Property="InactiveGlowColor" Value="#3F3F46" />
 		<Setter Property="OwnedByDockingManagerWindow" Value="False" />
 		<Setter Property="AllowMinimize" Value="True" />
+		<Setter Property="Title" Value="{Binding RelativeSource={RelativeSource Self}, Path=Model.SinglePane.SelectedContent.Title}" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonDockControls:LayoutDocumentFloatingWindowControl}">
