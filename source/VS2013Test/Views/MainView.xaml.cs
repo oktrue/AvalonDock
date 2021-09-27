@@ -139,6 +139,7 @@ namespace AvalonDock.VS2013Test.Views
 
 		private void OnCloseWindow(object sender, ExecutedRoutedEventArgs e)
 		{
+			if (!Workspace.This.CloseAll()) return;
 			SystemCommands.CloseWindow(this);
 		}
 

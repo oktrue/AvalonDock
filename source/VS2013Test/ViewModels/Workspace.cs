@@ -237,6 +237,30 @@ namespace AvalonDock.VS2013Test.ViewModels
 			_files.Remove(fileToClose);
 		}
 
+		internal bool CloseAll()
+		{
+			ObservableCollection<FileViewModel> filesToClose = new ObservableCollection<FileViewModel>(_files);
+
+			foreach (var fileToClose in filesToClose)
+			{
+				if (fileToClose.IsDirty)
+				{
+					var res = MessageBox.Show(string.Format("Save changes for file '{0}'?", fileToClose.FileName), "AvalonDock Test App", MessageBoxButton.YesNoCancel);
+					if (res == MessageBoxResult.Cancel)
+						return false;
+
+					if (res == MessageBoxResult.Yes)
+					{
+						Save(fileToClose);
+					}
+				}
+
+				_files.Remove(fileToClose);
+			}
+
+			return true;
+		}
+
 		internal void Save(FileViewModel fileToSave, bool saveAsFlag = false)
 		{
 			string newTitle = string.Empty;
