@@ -120,6 +120,25 @@ to also theme standard elements, such as, button and textblock etc.
 
 # Mile Stone History
 
+## Fixes Added in Version 4.70.1
+
+- [#336 Keep ActiveContent when switching RootPanel](https://github.com/Dirkster99/AvalonDock/pull/336)   (thanx to [Khaos66](https://github.com/Khaos66))
+- [#334 fix #333 x64-issue: x86-specific functions are used when project is compiled for x64-architecture](https://github.com/Dirkster99/AvalonDock/pull/334)   (thanx to [Jan cuellius](https://github.com/cuellius))
+
+## Features and Fixes Added in Version 4.70.0
+
+- [#331 FixDockAsDocument fix bug with CanExecute and Execute for DockAsDocument](https://github.com/Dirkster99/AvalonDock/pull/331)   (thanx to [askgthb](https://github.com/askgthb))
+- [#328 NullCheck for currentActiveContent ](https://github.com/Dirkster99/AvalonDock/pull/328)   (thanx to [Ben bbuerger](https://github.com/bbuerger))
+- [#327 Add default width and height of LayoutAnchorable](https://github.com/Dirkster99/AvalonDock/pull/327)   (thanx to [Anders Chen](https://github.com/AndersChen123))
+- [#326 A more complete fix to per-monitor DPI issues](https://github.com/Dirkster99/AvalonDock/pull/326)   (thanx to [Robin rwg0](https://github.com/rwg0))
+- [#324 Navigator Window Accessibility fixes](https://github.com/Dirkster99/AvalonDock/pull/324)   (thanx to [Siegfried Pammer](https://github.com/siegfriedpammer))
+
+## Features and Fixes Added in Version 4.60.1
+
+- [#314 Fix NavigatorWindow not working if there is only one document](https://github.com/Dirkster99/AvalonDock/pull/314)   (thanx to [Siegfried Pammer](https://github.com/siegfriedpammer))
+- [#308 Code Clean-Up Serialization](https://github.com/Dirkster99/AvalonDock/pull/308)   (thanx to [RadvileSaveraiteFemtika](https://github.com/RadvileSaveraiteFemtika))
+- [#317 Aded LayoutItem null check when processing mouseMiddleClickButton](https://github.com/Dirkster99/AvalonDock/pull/317)    (thanx to [JuanCar Orozco](https://github.com/Skaptor))
+
 ## Features and Fixes Added in Version 4.60.0
 
 - [#278 Rename pt-BR to pt (make Brazilian Portuguese default to Portuguese)](https://github.com/Dirkster99/AvalonDock/pull/278)   (thanx to [mpondo](https://github.com/mpondo))

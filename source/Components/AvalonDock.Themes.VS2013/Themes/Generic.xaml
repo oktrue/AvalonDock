@@ -2485,19 +2485,20 @@
 		</Setter>
 	</Style>
 
-	<Style x:Key="AvalonDockThemeVs2013NavigatorWindowListBoxItemStyle" TargetType="ListBoxItem">
-		<Setter Property="FocusVisualStyle" Value="{StaticResource AvalonDockThemeVs2013NavigatorWindowListBoxItemFocusVisual}" />
-		<Setter Property="Background" Value="Transparent" />
-		<Setter Property="BorderBrush" Value="Transparent" />
-		<Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.NavigatorWindowForeground}}" />
-		<Setter Property="BorderThickness" Value="1" />
-		<Setter Property="Padding" Value="5,0,5,0" />
-		<Setter Property="VerticalContentAlignment" Value="Center" />
-		<Setter Property="Cursor" Value="Hand" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="ListBoxItem">
-					<Border
+    <Style x:Key="AvalonDockThemeVs2013NavigatorWindowListBoxItemStyle" TargetType="ListBoxItem">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource AvalonDockThemeVs2013NavigatorWindowListBoxItemFocusVisual}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.NavigatorWindowForeground}}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="5,0,5,0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="AutomationProperties.Name" Value="{Binding LayoutElement.Title}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border
 						Background="{TemplateBinding Background}"
 						BorderBrush="{TemplateBinding BorderBrush}"
 						BorderThickness="{TemplateBinding BorderThickness}"
@@ -2635,6 +2636,7 @@
 												Text="{x:Static avalonDockProperties:Resources.Active_ToolWindows}" />
 											<ListBox
 												x:Name="PART_AnchorableListBox"
+												AutomationProperties.Name="{x:Static avalonDockProperties:Resources.Active_ToolWindows}"
 												Grid.Row="1"
 												MaxHeight="400"
 												Background="Transparent"
@@ -2672,6 +2674,7 @@
 
 											<ListBox
 												x:Name="PART_DocumentListBox"
+												AutomationProperties.Name="{x:Static avalonDockProperties:Resources.Active_Files}"
 												Grid.Row="1"
 												MaxHeight="400"
 												Background="Transparent"
