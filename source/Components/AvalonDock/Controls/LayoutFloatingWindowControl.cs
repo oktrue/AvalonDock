@@ -694,7 +694,14 @@ namespace AvalonDock.Controls
 			}
 
 			_attachDrag = false;
-			Show();
+			//Show();
+			//TODO: TestStyles
+			//var hwnd = _hwndSrc.Handle;
+			//var ws_ex = PInvoke.GetWindowLong((HWND)hwnd, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+			//var ws = PInvoke.GetWindowLong((HWND)hwnd, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+			//_ = PInvoke.SetWindowLong((HWND)windowHandle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (int)WINDOW_EX_STYLE.WS_EX_LEFT | (int)WINDOW_EX_STYLE.WS_EX_LTRREADING | (int)WINDOW_EX_STYLE.WS_EX_RIGHTSCROLLBAR | (int)WINDOW_EX_STYLE.WS_EX_WINDOWEDGE);
+			//_ = PInvoke.SetWindowLong((HWND)windowHandle, WINDOW_LONG_PTR_INDEX.GWL_STYLE, (int)WINDOW_STYLE.WS_CAPTION | (int)WINDOW_STYLE.WS_VISIBLE | (int)WINDOW_STYLE.WS_CLIPSIBLINGS | (int)WINDOW_STYLE.WS_CLIPCHILDREN | (int)WINDOW_STYLE.WS_SYSMENU | (int)WINDOW_STYLE.WS_THICKFRAME | (int)WINDOW_STYLE.WS_OVERLAPPED | (int)WINDOW_STYLE.WS_MINIMIZEBOX | (int)WINDOW_STYLE.WS_MAXIMIZEBOX);
+			Win32Helper.SetWindowPos(windowHandle, IntPtr.Zero, 0, 0, 0, 0, Win32Helper.SetWindowPosFlags.IgnoreZOrder | Win32Helper.SetWindowPosFlags.IgnoreMove | Win32Helper.SetWindowPosFlags.IgnoreResize | Win32Helper.SetWindowPosFlags.DoNotActivate | Win32Helper.SetWindowPosFlags.DrawFrame);
 			var lParam = new IntPtr(((int)mousePosition.X & 0xFFFF) | ((int)mousePosition.Y << 16));
 			Win32Helper.SendMessage(windowHandle, Win32Helper.WM_NCLBUTTONDOWN, new IntPtr(Win32Helper.HT_CAPTION), lParam);
 		}
